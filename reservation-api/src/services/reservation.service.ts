@@ -5,21 +5,29 @@ import { AppError } from "../errors/AppError";
 
 class ReservationService {
   async createReservation(data: ReservationCreationAttributes) {
-    const conflict = await reservationRepository.findAll({ room: data.room });
+    const start = new Date(data.startDate);
+    const end = new Date(data.endDate);
 
+    if (end <= start) {
+      throw new AppError("endDate deve ser posterior ao startDate", 400);
+    }
+
+    const conflict = await reservationRepository.findAll({ room: data.room });
     const hasConflict = conflict.rows.some(
-      (r) =>
-        new Date(data.startDate) < new Date(r.endDate) &&
-        new Date(data.endDate) > new Date(r.startDate)
+      (r) => start < new Date(r.endDate) && end > new Date(r.startDate)
     );
 
     if (hasConflict) {
       throw new AppError("Conflito de horário: a sala já está reservada.", 409);
     }
 
-    const newReservation = await reservationRepository.create(data);
-    await redisClient.flushAll();
+    const newReservation = await reservationRepository.create({
+      ...data,
+      startDate: start,
+      endDate: end,
+    });
 
+    await redisClient.flushAll();
     return newReservation;
   }
 
@@ -46,39 +54,40 @@ class ReservationService {
       throw new AppError("Reserva não encontrada.", 404);
     }
 
-    if (data.startDate || data.endDate) {
-      const newStart = data.startDate ?? existing.startDate;
-      const newEnd = data.endDate ?? existing.endDate;
+    const newStart = data.startDate ? new Date(data.startDate) : existing.startDate;
+    const newEnd = data.endDate ? new Date(data.endDate) : existing.endDate;
 
-      if (newEnd <= newStart) {
-        throw new AppError("endDate deve ser posterior ao startDate", 400);
-      }
-
-      const conflict = await reservationRepository.findAll({ room: existing.room });
-
-      const hasConflict = conflict.rows.some(
-        (r) =>
-          r.id !== existing.id &&
-          new Date(newStart) < new Date(r.endDate) &&
-          new Date(newEnd) > new Date(r.startDate)
-      );
-
-      if (hasConflict) {
-        throw new AppError("Conflito de horário: a sala já está reservada.", 409);
-      }
+    if (newEnd <= newStart) {
+      throw new AppError("endDate deve ser posterior ao startDate", 400);
     }
 
-    const updated = await existing.update(data);
-    await redisClient.flushAll();
+    const conflict = await reservationRepository.findAll({ room: existing.room });
+    const hasConflict = conflict.rows.some(
+      (r) =>
+        r.id !== existing.id &&
+        newStart < new Date(r.endDate) &&
+        newEnd > new Date(r.startDate)
+    );
 
+    if (hasConflict) {
+      throw new AppError("Conflito de horário: a sala já está reservada.", 409);
+    }
+
+    const updated = await existing.update({
+      ...data,
+      startDate: newStart,
+      endDate: newEnd,
+    });
+
+    await redisClient.flushAll();
     return updated;
   }
   
   async createRecurringReservations(data: {
     room: string;
     user: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     frequency: "daily" | "weekly";
     occurrences: number;
   }) {

@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: backend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DB_DIALECT: mysql
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: root
+      DB_NAME: reservas_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: supersecret
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+      - redis
+
+  backend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-prod
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_DIALECT: mysql
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: root
+      DB_NAME: reservas_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: supersecret
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reservas_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:

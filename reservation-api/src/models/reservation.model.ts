@@ -5,8 +5,8 @@ export interface ReservationAttributes {
   id: number;
   room: string;
   user: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
 }
 
 export interface ReservationCreationAttributes

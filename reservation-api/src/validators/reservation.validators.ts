@@ -10,17 +10,17 @@ export const createReservationValidator = [
     .trim()
     .isLength({ min: 1, max: 100 }).withMessage("user is required (1-100 chars)"),
   body("startDate")
-    .isISO8601({ strict: true }).withMessage("startDate must be ISO 8601")
-    .toDate(),
+    .isISO8601({ strict: true })
+    .withMessage("startDate must be ISO 8601"),
   body("endDate")
-    .isISO8601({ strict: true }).withMessage("endDate must be ISO 8601")
-    .toDate()
+    .isISO8601({ strict: true })
+    .withMessage("endDate must be ISO 8601")
     .custom((end, { req }) => {
-      const start = req.body.startDate instanceof Date
-        ? req.body.startDate
-        : new Date(req.body.startDate);
-      return end > start;
-    }).withMessage("endDate must be after startDate"),
+      if (new Date(end) <= new Date(req.body.startDate)) {
+        throw new Error("endDate must be after startDate");
+      }
+      return true;
+    }),
 ];
 
 export const listReservationsValidator = [
@@ -47,15 +47,13 @@ export const updateReservationValidator = [
   body("startDate")
     .optional()
     .isISO8601({ strict: true })
-    .withMessage("startDate must be ISO 8601")
-    .toDate(),
+    .withMessage("startDate must be ISO 8601"),
   body("endDate")
     .optional()
     .isISO8601({ strict: true })
     .withMessage("endDate must be ISO 8601")
-    .toDate()
     .custom((end, { req }) => {
-      if (req.body.startDate && end <= req.body.startDate) {
+      if (req.body.startDate && new Date(end) <= new Date(req.body.startDate)) {
         throw new Error("endDate must be after startDate");
       }
       return true;
@@ -70,14 +68,15 @@ export const createRecurringReservationValidator = [
     .isString().withMessage("user must be a string")
     .trim().isLength({ min: 1, max: 100 }),
   body("startDate")
-    .isISO8601({ strict: true }).withMessage("startDate must be ISO 8601")
-    .toDate(),
+    .isISO8601({ strict: true }).withMessage("startDate must be ISO 8601"),
   body("endDate")
     .isISO8601({ strict: true }).withMessage("endDate must be ISO 8601")
-    .toDate()
     .custom((end, { req }) => {
-      return end > new Date(req.body.startDate);
-    }).withMessage("endDate must be after startDate"),
+      if (new Date(end) <= new Date(req.body.startDate)) {
+        throw new Error("endDate must be after startDate");
+      }
+      return true;
+    }),
   body("frequency")
     .isIn(["daily", "weekly"]).withMessage("frequency must be daily or weekly"),
   body("occurrences")

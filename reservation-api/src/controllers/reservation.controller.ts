@@ -26,8 +26,8 @@ class ReservationController {
       const data = matchedData(req, { locations: ["body"] }) as {
         room: string;
         user: string;
-        startDate: Date;
-        endDate: Date;
+        startDate: string;
+        endDate: string;
         frequency: "daily" | "weekly";
         occurrences: number;
       };
@@ -73,8 +73,8 @@ class ReservationController {
     try {
       const { id, ...updates } = matchedData(req, { locations: ["params", "body"] }) as {
         id: number;
-        startDate?: Date;
-        endDate?: Date;
+        startDate?: string;
+        endDate?: string;
       };
 
       const reservation = await reservationService.updateReservation(id, updates);
