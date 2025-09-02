@@ -1,6 +1,7 @@
 import app from "./app";
 import sequelize from "./config/database";
 import dotenv from "dotenv";
+import logger from "./config/logger";
 
 dotenv.config();
 
@@ -9,12 +10,12 @@ const PORT = process.env.PORT || 3000;
 (async () => {
   try {
     await sequelize.authenticate();
-    console.log("Conectado ao banco com sucesso.");
-    await sequelize.sync();
+    logger.info("Conectado ao banco com sucesso.");
+
     app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT}`);
+      logger.info(`Servidor rodando na porta ${PORT}`);
     });
   } catch (error) {
-    console.error("Erro ao conectar no banco:", error);
+    logger.error("Erro ao conectar no banco:", error);
   }
 })();
