@@ -3,7 +3,6 @@ import { matchedData } from "express-validator";
 import reservationService from "../services/reservation.service";
 import {
   ReservationCreationAttributes,
-  ReservationAttributes,
 } from "../models/reservation.model";
 
 class ReservationController {
@@ -38,7 +37,6 @@ class ReservationController {
       next(error);
     }
   }
-
 
   async list(req: Request, res: Response, next: NextFunction) {
     try {

@@ -9,6 +9,7 @@ import {
   updateReservationValidator,
   createRecurringReservationValidator,
 } from "../validators/reservation.validators";
+import { authenticateToken } from "../middlewares/jsonwebtoken";
 
 const router = Router();
 
@@ -22,7 +23,7 @@ const router = Router();
  *       201:
  *         description: Criar uma reserva
  */
-router.post("/", createReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
+router.post("/", authenticateToken, createReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
   reservationController.create(req, res, next)
 );
 
@@ -38,6 +39,7 @@ router.post("/", createReservationValidator, validate, (req: Request, res: Respo
  */
 router.post(
   "/recorrencia",
+  authenticateToken,
   createRecurringReservationValidator,
   validate,
   (req: Request, res: Response, next: NextFunction) => reservationController.createRecurring(req, res, next)
@@ -53,7 +55,7 @@ router.post(
  *       200:
  *         description: Lista de reservas
  */
-router.get("/", listReservationsValidator, validate, cacheReservations,(req: Request, res: Response, next: NextFunction) =>
+router.get("/", authenticateToken, listReservationsValidator, validate, cacheReservations,(req: Request, res: Response, next: NextFunction) =>
   reservationController.list(req, res, next)
 );
 
@@ -67,7 +69,7 @@ router.get("/", listReservationsValidator, validate, cacheReservations,(req: Req
  *       200:
  *         description: Excluir uma reserva
  */
-router.delete("/:id", cancelReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
+router.delete("/:id", authenticateToken, cancelReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
   reservationController.cancel(req, res, next)
 );
 
@@ -81,7 +83,7 @@ router.delete("/:id", cancelReservationValidator, validate, (req: Request, res: 
  *       200:
  *         description: Alterar uma reserva
  */
-router.patch("/:id", updateReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
+router.patch("/:id", authenticateToken, updateReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
   reservationController.update(req, res, next)
 );
 
