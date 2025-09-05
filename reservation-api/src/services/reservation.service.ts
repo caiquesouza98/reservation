@@ -40,8 +40,8 @@ class ReservationService {
 
     const where: any = {};
 
-    if (room) where.roomId = room;
-    if (user) where.userId = user;
+    if (room) where.room = room;
+    if (user) where.room = user;
 
     return Reservation.findAndCountAll({
       where,

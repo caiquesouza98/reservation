@@ -29,7 +29,7 @@ router.post("/", authenticate, createReservationValidator, validate, (req: Reque
 
 /**
  * @swagger
- * /recorrencia:
+ * /reservas/recorrencia:
  *   post:
  *     summary: Criar uma reserva com recorrência
  *     tags: [Reservas]
