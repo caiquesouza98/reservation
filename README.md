@@ -21,7 +21,7 @@ Este projeto contém um sistema completo de gerenciamento de reservas de salas (
 
 ### Backend (Desenvolvimento com Hot Reload)
 ```bash
-cd backend
+cd reservation-api
 docker-compose up backend-dev db redis
 ```
 * App: http://localhost:3000
@@ -36,7 +36,7 @@ docker-compose exec backend-dev npm run seed
 
 ### Frontend
 ```bash
-cd frontend
+cd reservation-app
 npm install
 npm start
 ```
