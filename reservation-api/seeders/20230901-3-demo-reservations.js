@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert("Reservations", [
       {
         roomId: 1,
-        userId: 1,
+        userId: 2,
         startDate: new Date("2025-09-01T10:00:00Z"),
         endDate: new Date("2025-09-01T11:00:00Z"),
         createdAt: new Date(),
@@ -21,7 +21,6 @@ module.exports = {
       }
     ]);
   },
-
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete("Reservations", null, {});
   }

@@ -10,6 +10,15 @@ const sequelize: Sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: (process.env.DB_DIALECT as any) || "mysql",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+    retry: {
+      max: 5,
+    },
     logging: false,
   }
 );

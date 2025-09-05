@@ -9,7 +9,7 @@ import {
   updateReservationValidator,
   createRecurringReservationValidator,
 } from "../validators/reservation.validators";
-import { authenticateToken } from "../middlewares/jsonwebtoken";
+import { authenticate } from "../middlewares/auth";
 
 const router = Router();
 
@@ -23,13 +23,13 @@ const router = Router();
  *       201:
  *         description: Criar uma reserva
  */
-router.post("/", authenticateToken, createReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
+router.post("/", authenticate, createReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
   reservationController.create(req, res, next)
 );
 
 /**
  * @swagger
- * /reservas:
+ * /recorrencia:
  *   post:
  *     summary: Criar uma reserva com recorrência
  *     tags: [Reservas]
@@ -39,7 +39,7 @@ router.post("/", authenticateToken, createReservationValidator, validate, (req: 
  */
 router.post(
   "/recorrencia",
-  authenticateToken,
+  authenticate,
   createRecurringReservationValidator,
   validate,
   (req: Request, res: Response, next: NextFunction) => reservationController.createRecurring(req, res, next)
@@ -55,35 +55,35 @@ router.post(
  *       200:
  *         description: Lista de reservas
  */
-router.get("/", authenticateToken, listReservationsValidator, validate, cacheReservations,(req: Request, res: Response, next: NextFunction) =>
+router.get("/", authenticate, listReservationsValidator, validate, cacheReservations,(req: Request, res: Response, next: NextFunction) =>
   reservationController.list(req, res, next)
 );
 
 /**
  * @swagger
- * /reservas:
- *   get:
+ * /reservas/:id :
+ *   delete:
  *     summary: Excluir uma reserva
  *     tags: [Reservas]
  *     responses:
  *       200:
  *         description: Excluir uma reserva
  */
-router.delete("/:id", authenticateToken, cancelReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
+router.delete("/:id", authenticate, cancelReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
   reservationController.cancel(req, res, next)
 );
 
 /**
  * @swagger
- * /reservas:
- *   get:
+ * /reservas/:id :
+ *   patch:
  *     summary: Alterar uma reserva
  *     tags: [Reservas]
  *     responses:
  *       200:
  *         description: Alterar uma reserva
  */
-router.patch("/:id", authenticateToken, updateReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
+router.patch("/:id", authenticate, updateReservationValidator, validate, (req: Request, res: Response, next: NextFunction) =>
   reservationController.update(req, res, next)
 );
 

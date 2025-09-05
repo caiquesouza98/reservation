@@ -51,8 +51,17 @@ class ReservationController {
 
       const { room, user, page, limit, sort, order } = filters;
 
+      const cleanFilters: any = {};
+
+      if (room && room !== "undefined") {
+        cleanFilters.room = Number(room);
+      }
+      if (user && user !== "undefined") {
+        cleanFilters.user = Number(user);
+      }
+
       const result = await reservationService.listReservations(
-        { room, user },
+        cleanFilters,
         { page, limit, sort, order }
       );
 

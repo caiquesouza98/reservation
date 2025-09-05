@@ -7,10 +7,9 @@ module.exports = {
       name: { type: Sequelize.STRING, allowNull: false, unique: true },
       capacity: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 1 },
       createdAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW },
-      updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW },
+      updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW }
     });
   },
-
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Rooms");
   }

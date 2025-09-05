@@ -8,7 +8,6 @@ module.exports = {
       { name: "Sala 3", capacity: 20, createdAt: new Date(), updatedAt: new Date() }
     ]);
   },
-
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete("Rooms", null, {});
   }

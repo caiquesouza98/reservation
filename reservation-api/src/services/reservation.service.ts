@@ -1,5 +1,5 @@
 import reservationRepository from "../repositories/reservation.repository";
-import { ReservationCreationAttributes, ReservationAttributes } from "../models/reservation.model";
+import Reservation, { ReservationCreationAttributes, ReservationAttributes } from "../models/reservation.model";
 import redisClient from "../config/redis";
 import { AppError } from "../errors/AppError";
 
@@ -35,7 +35,20 @@ class ReservationService {
     filters: Partial<ReservationAttributes>,
     options: { page?: number; limit?: number; sort?: string; order?: "asc" | "desc" }
   ) {
-    return await reservationRepository.findAll(filters, options);
+    const { room, user } = filters;
+    const { page = 1, limit = 10, sort = "startDate", order = "asc" } = options;
+
+    const where: any = {};
+
+    if (room) where.roomId = room;
+    if (user) where.userId = user;
+
+    return Reservation.findAndCountAll({
+      where,
+      limit,
+      offset: (page - 1) * limit,
+      order: [[sort, order]],
+    });
   }
 
   async cancelReservation(id: number) {

@@ -22,7 +22,6 @@ module.exports = {
       updatedAt: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW }
     });
   },
-
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Reservations");
   }

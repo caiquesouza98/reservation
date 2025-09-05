@@ -129,8 +129,8 @@ describe('ReservationService - hasConflict logic', () => {
       const data = {
         room: 'A',
         user: 'U',
-        startDate: new Date('2024-06-01T10:00:00Z'),
-        endDate: new Date('2024-06-01T11:00:00Z'),
+        startDate: '2024-06-01T10:00:00Z',
+        endDate: '2024-06-01T11:00:00Z',
         frequency: 'daily' as 'daily' | 'weekly',
         occurrences: 2,
       };
@@ -159,8 +159,8 @@ describe('ReservationService - hasConflict logic', () => {
       const data = {
         room: 'A',
         user: 'U',
-        startDate: new Date('2024-06-01T10:00:00Z'),
-        endDate: new Date('2024-06-01T11:00:00Z'),
+        startDate:'2024-06-01T10:00:00Z',
+        endDate:'2024-06-01T11:00:00Z',
         frequency: 'daily' as 'daily' | 'weekly',
         occurrences: 2,
       };
