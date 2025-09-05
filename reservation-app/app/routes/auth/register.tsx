@@ -42,9 +42,9 @@ export default function Register() {
     }
   }
   return (
-    <Container borderRadius="md" borderColor="white" borderWidth="thin" centerContent my={40} flex={1} flexDir={"column"} gap={4} width="lg" p={10}>
+    <form method="post" onSubmit={handleRegistration}>
+      <Container borderRadius="md" borderColor="white" borderWidth="thin" centerContent my={40} flex={1} flexDir={"column"} gap={4} width="lg" p={10}>
         <Heading mb={6}>Cadastrar-se</Heading>
-        <Form method="post">
         <div>
           <Field.Root required>
             <Field.Label>
@@ -72,9 +72,9 @@ export default function Register() {
             <PasswordInput width={"sm"} color={"black"} backgroundColor={"white"} visible={visible} onVisibleChange={setVisible} name="password" placeholder="Digite sua senha" value={password} onChange={(e) => setPassword(e.target.value)}/>
           </Field.Root>
         </div>
-        <Button width={"sm"} type="submit" onClick={handleRegistration}>Criar conta</Button>
+        <Button width={"sm"} type="submit">Criar conta</Button>
         <Link to="/"><Button width={"sm"} type="button">Entrar</Button></Link>
-        </Form>
       </Container>
+    </form>
   )
 }

@@ -1,6 +1,6 @@
 import { Form } from "react-router"
 import type { Route } from "./+types/newReservations";
-import { Box, Container, Heading, Spinner, Table } from "@chakra-ui/react";
+import { Box, Button, Container, Heading, Spinner, Table } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { deleteReserva, getReservas } from "@/api/reservations";
 import { toaster } from "@/components/ui/toaster";
@@ -14,8 +14,8 @@ export function meta({}: Route.MetaArgs) {
 
 interface Reserva {
   id: number;
-  roomId: number;
-  userId: number;
+  room: string;
+  user: string;
   startDate: string;
   endDate: string;
 }
@@ -71,11 +71,15 @@ export default function Home() {
           <Table.Body>
             {reservas.map((r) => (
               <Table.Row key={r.id}>
-                <Table.Cell>{r.roomId}</Table.Cell>
-                <Table.Cell>{r.userId}</Table.Cell>
+                <Table.Cell>{r.room}</Table.Cell>
+                <Table.Cell>{r.user}</Table.Cell>
                 <Table.Cell>{new Date(r.startDate).toLocaleString()}</Table.Cell>
                 <Table.Cell>{new Date(r.endDate).toLocaleString()}</Table.Cell>
-                <Table.Cell></Table.Cell>
+                <Table.Cell>
+                  <Button size="sm" colorScheme="red" onClick={() => handleDeleteReserva(r.id)}>
+                    Cancelar
+                  </Button>
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

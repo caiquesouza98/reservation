@@ -31,25 +31,25 @@ export default function Login() {
   }
 
   return (
-    <Container borderRadius="md" borderColor="white" borderWidth="thin" centerContent my={40} flex={1} flexDir={"column"} gap={4} width="lg" p={10}>
+    <form method="post" onSubmit={handleSubmit}>
+      <Container borderRadius="md" borderColor="white" borderWidth="thin" centerContent my={40} flex={1} flexDir={"column"} gap={4} width="lg" p={10}>
         <Heading mb={6}>Entrar</Heading>
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <form method="post" onSubmit={handleSubmit}>
         <div>
           <Field.Root>
             <Field.Label>Email</Field.Label>
-            <Input width={"sm"} color={"black"} backgroundColor={"white"} type="email" name="email" placeholder="Digite seu email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+            <Input width={"sm"} color={"black"} backgroundColor={"white"} type="email" name="email" placeholder="Digite seu email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </Field.Root>
         </div>
         <div>
           <Field.Root>
             <Field.Label>Senha</Field.Label>
-            <PasswordInput width={"sm"} color={"black"} backgroundColor={"white"} name="password" placeholder="Digite sua senha" visible={visible} onVisibleChange={setVisible} value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <PasswordInput width={"sm"} color={"black"} backgroundColor={"white"} name="password" placeholder="Digite sua senha" visible={visible} onVisibleChange={setVisible} value={password} onChange={(e) => setPassword(e.target.value)} required/>
           </Field.Root>
         </div>
         <Button width={"sm"} type="submit">Entrar</Button>
         <Link to="/register"><Button width={"sm"} type="button">Criar conta</Button></Link>
-        </form>
-    </Container>
+      </Container>
+    </form>
   );
 }
